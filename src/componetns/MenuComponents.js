@@ -9,7 +9,7 @@ import dateFormat from "dateformat";
         column4: "col-md-3 mt-1",
         column6:"col-md-2 mt-1"
 }
-    let {column1,column2,column3,column4,column7}=columnChange
+    let {column1,column2,column3,column4,column6}=columnChange
 class StaffList extends Component{
     constructor(props) {
         super(props);
