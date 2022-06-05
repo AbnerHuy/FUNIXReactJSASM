@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, CardImg, CardTitle, CardBody, CardText } from "reactstrap";
+import { Card, CardTitle, CardBody, CardText } from "reactstrap";
 import dateFormat from "dateformat";
 
 const classChange = {
@@ -87,7 +87,7 @@ class StaffList extends Component {
             <div className="row">{staffList}
                   
                   <div style={{fontSize: "40px",color:"pink"  }}>
-                      Bấm vào nhân viên để xem thông tin 
+                      Bấm vào nhân viên để xem thông tin :
             </div>
             </div>
             <div className="row mt-5">
