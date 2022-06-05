@@ -47,7 +47,7 @@ class StaffList extends Component {
               <CardText>Phòng ban: {staff.department.name}</CardText>
               <CardText>Số ngày nghỉ còn lại: {staff.annualLeave}</CardText>
                       <CardText>Số ngày đã làm thêm: {staff.overTime}</CardText>
-                      <CardImg></CardImg>
+                      
             </CardBody>
           </Card>
         </div>
