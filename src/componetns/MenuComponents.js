@@ -66,7 +66,7 @@ class StaffList extends Component {
             <CardBody>
               <CardTitle>{staff.name}</CardTitle>
             </CardBody>
-          </Card>
+              </Card>
         </div>
       );
     });
@@ -82,7 +82,18 @@ class StaffList extends Component {
           <button onClick={() => this.onColumnSelect(column6)}className="btn  btn-info mr-3"> 6 cột</button>
           
         </div>
-        <div className="row">{staffList}</div>
+              <div className="row">{staffList}
+                  
+                  <div style={{
+                      fontSize: "40px",
+                      color:"pink"
+                  
+                  }}>
+            
+                      Bấm vào nhân viên để xem thông tin
+                      
+              </div>
+              </div>
         <div className="row mt-5">
           {this.renderStaff(this.state.onSelectedStaff)}
         </div>
