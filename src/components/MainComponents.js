@@ -8,8 +8,8 @@ import Footer from "./FooterComponent";
 import { Switch, Router, Redirect } from 'react-router-dom'
 import Contact from "./ContactComponent";
 import {COMMENTS}from"../share/comments"
-import {Leaders}from"../share/comments"
-import {PROMOTIONS}from"../share/comments"
+import {LEADERS}from"../share/leaders"
+import {PROMOTIONS}from"../share/Promotion"
 
 class Main extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class Main extends Component {
     this.state = {
         dishes: DISHES,
         comments: COMMENTS,
-        leaders: Leaders,
+        leaders: LEADERS,
         promotions:PROMOTIONS
     };
     }
@@ -39,6 +39,13 @@ class Main extends Component {
 
       )
     }
+    const DiswithId = ({ match }) => {
+      return(
+
+        <DishDetail dish={this.state.dishes.filter((dish) => dish.id === parseInt(match.param.dishId, 10)[0])} 
+          comments={this.state.comments.filter((comment) => comment.dishId === parseInt(match.param.dishId, 10)[0])} />
+      )
+    }
 
     return (
       <div>
@@ -47,6 +54,7 @@ class Main extends Component {
         <Switch>
           <Router path="/home" component={HomePage} />    
           <Router exact path="/menu" component={() => <Menu dishes={this.state.dishes} />} />
+          <Router exact path="/menu/:dishId" comments={DiswithId}/>
           <Router exact path="/contacus" component={Contact}/>
           <Redirect to="/home"/>
         </Switch>
