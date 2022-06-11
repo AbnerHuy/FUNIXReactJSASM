@@ -13,7 +13,7 @@ class Header extends Component {
         }
         this.toggleNav = this.toggleNav.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
-        this.handleLogin = this.handleLogin.bind(this);
+        this.handleLogin=this.handleLogin.bind(this)
     }
 
     toggleNav() {
@@ -26,12 +26,12 @@ class Header extends Component {
             isModalOpen: !this.state.isModalOpen
         });
     }
-    handleLogin(e) {
+    handleLogin(event) {
         this.toggleModal();
-        alert(" Username :" + this.username.value +
-            " Password :" + this.pasword.value +
-            " Remember :" + this.remember.checked);
-        e.prevenDefault();
+        alert("Username: " + this.username.value + " Password: " + this.password.value
+            + " Remember: " + this.remember.checked);
+        event.preventDefault();
+
     }
 
     render(){
@@ -89,31 +89,29 @@ class Header extends Component {
                 <Modal isOpen={this.state.isModalOpen} toggle={this.state.toggleModal}>
                     <ModalHeader toggle={this.state.toggleModal}>Login</ModalHeader>
                     <ModalBody>
+                       . . .
+
                         <Form onSubmit={this.handleLogin}>
                             <FormGroup>
-                                <Label htmlFor="username">User Name</Label>
+                                <Label htmlFor="username">Username</Label>
                                 <Input type="text" id="username" name="username"
-                                        innerRef={(input)=>this.username=input}                                
-                                ></Input>
+                                    innerRef={(input) => this.username = input} />
                             </FormGroup>
                             <FormGroup>
                                 <Label htmlFor="password">Password</Label>
                                 <Input type="password" id="password" name="password"
-                                     innerRef={(input)=>this.pasword=input} 
-                                ></Input>
-                                                                   
-
+                                    innerRef={(input) => this.password = input}  />
                             </FormGroup>
                             <FormGroup check>
                                 <Label check>
                                     <Input type="checkbox" name="remember"
-                                        innerRef={(input)=>this.remember=input}                                
-                                    >Remember Me</Input>
+                                    innerRef={(input) => this.remember = input}  />
+                                    Remember me
                                 </Label>
-
                             </FormGroup>
-                            <Button type="submi" color="primary" value="submit">Login</Button>
+                            <Button type="submit" value="submit" color="primary">Login</Button>
                         </Form>
+                        
                     </ModalBody>
                 </Modal>
             </React.Fragment>
