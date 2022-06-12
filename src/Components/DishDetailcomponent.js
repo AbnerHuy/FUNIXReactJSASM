@@ -34,10 +34,7 @@ function RenderComments({comments}) {
                 </ul>
                 <Nav className="ml-auto" nav>
                     <NavItem >
-                        <Button outline  onClick={this.toggleModal}>
-                            <span className="fa fa-sign-in fa-lg"></span> Submit Comment
-                        </Button>
-
+                      <CommentForm/>
                     </NavItem>  
                 </Nav>
             </div>

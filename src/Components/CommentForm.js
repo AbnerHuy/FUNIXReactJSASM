@@ -2,21 +2,26 @@ import React,{Component} from "react";
 import { Label, Button, Modal, ModalHeader, ModalBody, Row, Col,Input,FormGroup,Form } from "reactstrap";
 import { Control, LocalForm, Errors, } from "react-redux-form"
 
+const required = (val) => (val) && val.length;
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
+const minLength = (len) => (val) => (val) && (val.length >= len);
+
+
 class CommentForm extends Component{
     constructor(props) {
         super(props)
         this.state = {
-            isModalOpen: false,
+           isModalOpen: false,
             isNavOpen:false
         }
-        this.togglemodal=this.togglemodal.bind(this)
+        this.toggleModal = this.toggleModal.bind(this);
         this.handleLogin=this.handleLogin.bind(this)
     }
-    togglemodal() {
-        this.setstate({
-        isModalOpen:!this.stateisModalOpen
-    })
-    }
+     toggleModal() {
+        this.setState({
+          isModalOpen: !this.state.isModalOpen
+        });
+      }
     handleLogin(event) {
         this.toggleModal();
         alert("Username: " + this.username.value + " Password: " + this.password.value
@@ -26,32 +31,78 @@ class CommentForm extends Component{
     }
     render() {
         return (
-                    <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
-                    <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
+            <div>
+                      <Button outline  onClick={this.toggleModal}>
+                            <span className="fa fa-sign-in fa-lg"></span> Submit Comment
+                        </Button>
+
+                     <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+                    <ModalHeader toggle={this.toggleModal}>Submit comment</ModalHeader>
                     <ModalBody>
-                               <Form onSubmit={this.handleLogin}>
-                            <FormGroup>
-                                <Label htmlFor="username">Username</Label>
-                                <Input type="text" id="username" name="username"
-                                    innerRef={(input) => this.username = input} />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label htmlFor="password">Password</Label>
-                                <Input type="password" id="password" name="password"
-                                    innerRef={(input) => this.password = input}  />
-                            </FormGroup>
-                            <FormGroup check>
-                                <Label check>
-                                    <Input type="checkbox" name="remember"
-                                    innerRef={(input) => this.remember = input}  />
-                                    Remember me
-                                </Label>
-                            </FormGroup>
-                            <Button type="submit" value="submit" color="primary">Login</Button>
-                        </Form>
+                               <LocalForm onSubmit={this.handleLogin}>
+                            <Row>
+                                <Col>
+                                      <Label htmlFor="select">Rating</Label>
+                                    <Control.select model=".select"
+                                        name="select"
+                                       className='form-control'>
+                                        <option >1</option>
+                                        <option >2</option>
+                                        <option >3</option>
+                                        <option >4</option>
+                                        <option >5</option>
+                                    </Control.select>
+                                </Col>
+                              
+                                
+                            </Row>
+                            <Row>
+                                <Col  >
+                                     <Label htmlFor="yourname">Your Name</Label>
+                                    <Control.text model=".yourname" id="yourname" name="yourname" className="form-control"
+                                        validators={{
+                                            required,
+                                            minLength: minLength(3),
+                                            maxLength:maxLength(15)
+                                        }}
+                                         />
+                                <Errors
+                                        className='text-danger'
+                                        model=".yourname"
+                                        show="touched"
+                                        messages={{
+                                            required: "Required",
+                                            minLength:"Must be greater than 2 character",
+                                            maxLength:"Must be 15 character or less"
+                                        }}
+
+                                    />
+                                </Col>
+                               
+                            </Row>
+                            <Row >
+                                <Col >
+                                    <Label htmlFor ="comment" > Comment</Label>
+                                    <Control.textarea model=".comment" name="comment" id ="comment" className="form-control"
+                                     />
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button type="submit" value="submit" color="primary">Submit</Button>
+                                </Col>
+                            </Row>
+                          
+                        </LocalForm>
                         
                     </ModalBody>
                 </Modal>
+
+            </div>
+                    
+           
+            
+                   
                 )
 }
 
