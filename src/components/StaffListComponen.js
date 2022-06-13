@@ -1,21 +1,8 @@
 import React, { Component } from "react";
-import {
-  Card,
-  CardImg,
-  CardBody,
-  CardSubtitle,
-  Button,
-  Modal,
-  Col,
-  Form,
-  Input,
-  ModalHeader,
-  ModalBody,
-  Row,
-  Label,
-  FormFeedback
-} from "reactstrap";
+import {Card,CardImg,CardBody,CardSubtitle,Button,Modal,Col,
+  Form,Input,ModalHeader,ModalBody,Row,Label,FormFeedback} from "reactstrap";
 import { Link } from "react-router-dom";
+import { DEPARTMENTS } from "../shared/Staffs";
 // Render ra nhân viên
 const RenderStaffItem = ({ staff }) => {
   return (
@@ -39,11 +26,12 @@ class StaffList extends Component {
       doB: "",
       salaryScale: 1,
       startDate: "",
-      department: "Sale",
+      department: "",
       annualLeave: 0,
       overTime: 0,
       salary: 30000,
       image: "/assets/images/alberto.png",
+      
       touched: {
         name: false,
         doB: false,
@@ -58,21 +46,21 @@ class StaffList extends Component {
       modalOpen: false
     };
 
-    this.findfStaff = this.findfStaff.bind(this);
+    this.FindStaff = this.FindStaff.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
-
-  handleBlur = (field) => (e) => {
+// Bỏ chuột ra khỏi trường Input
+  handleBlur = (field) => (event) => {
     this.setState({
       touched: { ...this.state.touched, [field]: true }
     });
   };
 
-  handleInputChange(e) {
-    const target = e.target;
+  handleInputChange(event) {
+    const target = event.target;
     const value = target.value;
     const name = target.name;
     this.setState({
@@ -81,22 +69,24 @@ class StaffList extends Component {
   }
 
   handleSubmit = () => {
+    const department = DEPARTMENTS.find(
+      (department) => department.id === this.state.department
+    );
+    console.log("department", department)
     const newStaff = {
       name: this.state.name,
       doB: this.state.doB,
       startDate: this.state.startDate,
-      department: this.state.department,
+      department: department,
       salaryScale: this.state.salaryScale,
       annualLeave: this.state.annualLeave,
       overTime: this.state.overTime,
       image: this.state.image
     };
-    this.props.addStaff(newStaff);
+    this.props.add(newStaff);
   };
-
-  validate(name, department, salaryScale,
-    doB, startDate, annualLeave, overTime
-  ) {
+// lọc điều kiện của Form
+  validate( name,department, salaryScale,doB,startDate, annualLeave, overTime) {
     const errors = {
       name: "",
       department: "",
@@ -108,19 +98,19 @@ class StaffList extends Component {
     };
     if (this.state.touched.name && name.length < 3)
       errors.name = "Name should be >= 3 characters";
-    else if (this.state.touched.name && name.length > 30)
-      errors.name = "Name should be <= 0 characters";
+    else if (this.state.touched.name && name.length > 50)
+      errors.name = "Name should be <= 10 characters";
     if (this.state.touched.department && department.length < 1)
-      errors.department = "Please enter this field";
+      errors.department = "Please enter the field";
     if (this.state.touched.salaryScale && salaryScale.length < 1)
-      errors.salaryScale = "Please enter this field";
+      errors.salaryScale = "Please enter the field";
     if (this.state.touched.annualLeave && annualLeave.length < 1)
-      errors.annualLeave = "Please enter this field";
+      errors.annualLeave = "Please enter the field";
     if (this.state.touched.overTime && overTime.length < 1)
-      errors.overTime = "Please enter this field";
-    if (this.state.touched.doB && doB.length < 1) errors.doB = "Please enter this field";
+      errors.overTime = "Please enter the field";
+    if (this.state.touched.doB && doB.length < 1) errors.doB = "Please enter the field";
     if (this.state.touched.startDate && startDate.length < 1)
-      errors.startDate = "Please enter this field";
+      errors.startDate = "Please enter the field";
     return errors;
   }
 
@@ -129,15 +119,14 @@ class StaffList extends Component {
       modalOpen: !this.state.modalOpen
     });
   }
-// Tìm nhân viên thông qua ký tự 
-  findfStaff(event) {
+
+  FindStaff(event) {
     event.preventDefault();
-    const nameS = event.target.nameS.value;
-    this.setState({ nameF: nameS });
+    const newName = event.target.newName.value;
+    this.setState({ nameF: newName });
   }
 
   render() {
-
     const errors = this.validate(
       this.state.name,
       this.state.department,
@@ -148,7 +137,7 @@ class StaffList extends Component {
       this.state.overTime
     );
 
-    const list = this.props.staffs
+    const staffList = this.props.staffs
       .filter((val) => {
         if (this.state.nameF === "") return val;
         else if (
@@ -166,7 +155,6 @@ class StaffList extends Component {
       });
 
     return (
-
       <div className="container">
         <div className="row">
           <div className="col-12 col-md-6 mt-3">
@@ -182,31 +170,28 @@ class StaffList extends Component {
             </div>
           </div>
           <div className="col-12 col-md-6 mt-3">
-            <form onSubmit={this.findfStaff} className="form-group row">
+            <form onSubmit={this.FindStaff} className="form-group row">
               <div className="col-8 col-md-8">
-                <input type="text"   name="nameS" className="form-control"
-                  placeholder="Tìm kiếm nhân viên ..." />
+                <input type="text"  name="newName" className="form-control" placeholder="Tìm kiếm nhân viên ..."  />
               </div>
               <div className="col-4 col-md-4">
-                <button className="btn btn-success" type="submit"> Tìm kiếm </button>
+                <button className="btn btn-primary" type="submit">  Tìm kiếm  </button>
               </div>
             </form>
           </div>
         </div>
-        <div className="col-12">  <hr />  </div>
-        
-           {/*Render ra form Dữ liệu   */}
+        <div className="col-12">
+          <hr />
+        </div>
 
         <Modal isOpen={this.state.modalOpen} toggle={this.toggleModal}>
           <ModalHeader toggle={this.toggleModal}>Thêm nhân viên</ModalHeader>
           <ModalBody>
             <Form onSubmit={this.handleSubmit}>
               <Row className="control-group">
-                <Label htmlFor="name" md={4}>
-                  Tên
-                </Label>
+                <Label htmlFor="name" md={4}>Tên </Label>
                 <Col md={8}>
-                  <Input  type="text"  className="form-control"  id="name" name="name"
+                  <Input  type="text" className="form-control"  id="name" name="name"
                     value={this.state.name}
                     valid={errors.name === ""}
                     invalid={errors.name !== ""}
@@ -217,11 +202,9 @@ class StaffList extends Component {
                 </Col>
               </Row>
               <Row className="control-group">
-                <Label htmlFor="doB" md={4}>
-                  Ngày sinh
-                </Label>
+                <Label htmlFor="doB" md={4}>  Ngày sinh  </Label>
                 <Col md={8}>
-                  <Input  type="date"  name="doB" id="doB"
+                  <Input type="date"   name="doB"  id="doB"
                     value={this.state.doB}
                     valid={errors.doB === ""}
                     invalid={errors.doB !== ""}
@@ -232,9 +215,7 @@ class StaffList extends Component {
                 </Col>
               </Row>
               <Row className="control-group">
-                <Label htmlFor="startDate" md={4}>
-                  Ngày vào công ty
-                </Label>
+                <Label htmlFor="startDate" md={4}> Ngày vào công ty </Label>
                 <Col md={8}>
                   <Input  type="date"  name="startDate" id="startDate"
                     valid={errors.startDate === ""}
@@ -246,23 +227,23 @@ class StaffList extends Component {
                 </Col>
               </Row>
               <Row className="control-group">
-                <Label htmlFor="department" md={4}>
-                  Phòng ban
-                </Label>
+                <Label htmlFor="department" md={4}>  Phòng ban</Label>
                 <Col md={8}>
-                  <Input  type="select"  name="department" id="department"
-                    className="form-control"
-                    value={this.state.department}
+                  <Input  type="select" name="department"   id="department"  className="form-control"
+                    value={this.state.Department}
+                    
                     valid={errors.department === ""}
                     invalid={errors.department !== ""}
                     onBlur={this.handleBlur("department")}
-                    onChange={this.handleInputChange}
-                  >
-                    <option>Sale</option>
-                    <option>HR</option>
-                    <option>Marketing</option>
-                    <option>IT</option>
-                    <option>Finance</option>
+                    onChange={this.handleInputChange} >
+                      
+                    <option value="select">Sale</option>
+                    <option value="Dept01">Sale</option>
+                    <option value="Dept02">HR</option>
+                    <option value="Dept03">Marketing</option>
+                    <option value="Dept04">IT</option>
+                    <option value="Dept05">Finance</option>
+                     
                   </Input>
                   <FormFeedback>{errors.department}</FormFeedback>
                 </Col>
@@ -272,7 +253,7 @@ class StaffList extends Component {
                   Hệ số lương
                 </Label>
                 <Col md={8}>
-                  <Input  type="text"  id="salaryScale" name="salaryScale"
+                  <Input type="text" id="salaryScale"name="salaryScale"
                     className="form-control"
                     value={this.state.salaryScale}
                     valid={errors.salaryScale === ""}
@@ -288,7 +269,7 @@ class StaffList extends Component {
                   Số ngày nghỉ còn lại
                 </Label>
                 <Col md={8}>
-                  <Input  type="text"  id="annualLeave" name="annualLeave" className="form-control"
+                  <Input type="text" id="annualLeave" name="annualLeave" className="form-control"
                     value={this.state.annualLeave}
                     valid={errors.annualLeave === ""}
                     invalid={errors.annualLeave !== ""}
@@ -303,7 +284,7 @@ class StaffList extends Component {
                   Số ngày đã làm thêm
                 </Label>
                 <Col md={8}>
-                  <Input  type="text"  id="overTime" name="overTime" className="form-control"
+                  <Input type="text" id="overTime"  name="overTime" className="form-control"
                     value={this.state.overTime}
                     valid={errors.overTime === ""}
                     invalid={errors.overTime !== ""}
@@ -315,14 +296,16 @@ class StaffList extends Component {
               </Row>
               <Row className="control-group">
                 <Col md={{ size: 10, offset: 2 }}>
-                  <Button type="submit" color="success">Thêm </Button>
+                  <Button type="submit" color="primary">
+                    Thêm
+                  </Button>
                 </Col>
               </Row>
             </Form>
           </ModalBody>
         </Modal>
 
-        <div className="row shadow mb-5 mt-5">{list}</div>
+        <div className="row shadow mb-5 mt-5">{staffList}</div>
       </div>
     );
   }

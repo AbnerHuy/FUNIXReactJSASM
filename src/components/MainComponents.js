@@ -16,28 +16,37 @@ class Main extends Component {
              staffs: STAFFS,
             departmens:DEPARTMENTS
         }
-        this.addStaff=this.addStaff.bind(this)
+        this.addStaff = this.addStaff.bind(this)
+     
     }
     // Thêm nhân viên vào danh sách
 
-    addStaff(staff) {
-        const id = Math.floor(Math.random() * 10000 + 1);
-        const newStaff = { id, ...staff };
-        this.setState({
-            staffs:[...this.state.staffs,newStaff]
-        })
-    }
+     addStaff = (staff) => {
+         const id = Math.floor(Math.random() * 10000 + 1);
+         const newStaff = { id, ...staff };
+         
+    this.setState({
+        staffs: [...this.state.staffs, newStaff],
+   
+    });
+    
+    
+  };
+
     render() {
+        // chuyển đổi String sang number
         const DetailStaff = ({ match }) => {
             return (
                 <Detail ID={this.state.staffs.filter((item) => item.id === parseInt(match.params.staffId, 10))[0]} />
             )
         }
+        // Di chuyển giữa các trang
+        
          return (
         <div>
             <Header />
             <Switch>
-                <Route  exact path='/staff' component={() => <StaffList addStaff={this.addStaff} staffs={this.state.staffs} />} />
+                <Route  exact path='/staff' component={() => <StaffList add={this.addStaff} staffs={this.state.staffs} />} />
                 <Route path='/staff/:staffId' component={DetailStaff} />
                 <Route  path='/department' component ={()=><Department department={this.state.departmens}/>}/>
                 <Route path='/salary' component={() => <SalaryDetail salary={this.state.staffs} />} />

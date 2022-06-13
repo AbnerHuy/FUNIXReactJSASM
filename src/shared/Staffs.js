@@ -1,5 +1,12 @@
 export const DEPARTMENTS =
     [
+    //khi em submit name là Sale thì cái em cần lưu là 1 object (id, name , numberOfStaff ) chứ khồng phải mỗi cái Name
+        {
+            id: "Dept01",
+            name: "Sale",
+            numberOfStaff: 1
+        },
+
         {
             id: "Dept01",
             name: "Sale",
@@ -60,6 +67,7 @@ export const STAFFS =
             doB: "2001-01-01T08:59:00.000Z",
             salaryScale: 1,
             startDate: "2019-04-30T08:59:00.000Z",
+            //e thấy department được lưu dưới dạng 1 object (bao gôm id, tên phòng ban ,...)
             department: DEPARTMENTS[3],
             annualLeave: 4,
             overTime: 5,
